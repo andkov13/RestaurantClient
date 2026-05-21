@@ -2,17 +2,7 @@ import { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
-
-const AdminDashboard = () => {
-    const { logout, user } = useContext(AuthContext);
-    return (
-        <div style={{ padding: '20px' }}>
-            <h2>Admin Dashboard</h2>
-            <p>Welcome, {user?.username}! You have full access.</p>
-            <button onClick={logout}>Logout</button>
-        </div>
-    );
-};
+import AdminDashboard from './pages/AdminDashboard';
 
 const PosTerminal = () => {
     const { logout, user } = useContext(AuthContext);
