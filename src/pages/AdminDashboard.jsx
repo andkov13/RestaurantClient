@@ -5,6 +5,7 @@ import './AdminDashboard.css';
 import StaffManager from '../components/StaffManager';
 import CategoryManager from '../components/CategoryManager';
 import MenuItemManager from '../components/MenuItemManager';
+import IngredientManager from '../components/IngredientManager';
 
 export default function AdminDashboard() {
     const { logout, user } = useContext(AuthContext);
@@ -62,9 +63,7 @@ export default function AdminDashboard() {
                         <header className="content-header">
                             <h2>Inventory Management</h2>
                         </header>
-                        <div className="card">
-                            <p>TBD</p>
-                        </div>
+                        <IngredientManager /> 
                     </div>
                 )}
             </main>

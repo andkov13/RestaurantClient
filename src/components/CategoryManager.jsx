@@ -62,7 +62,7 @@ export default function CategoryManager() {
             <form onSubmit={handleSubmit} className="inline-form" style={{ marginBottom: '20px' }}>
                 <input 
                     type="text" 
-                    placeholder="Category Name (e.g., Beverages)" 
+                    placeholder="Category Name" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
                     required 
