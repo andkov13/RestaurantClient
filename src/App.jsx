@@ -4,6 +4,8 @@ import { AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import PosTerminal from './pages/PosTerminal';
+import KitchenDisplay from './pages/KitchenDisplay'; 
+import ActiveOrders from './pages/ActiveOrders';
 
 const Unauthorized = () => (
     <div style={{ padding: '20px', color: 'red' }}>
@@ -34,39 +36,39 @@ function App() {
 
     return (
         <Routes>
-            <Route 
-                path="/login" 
-                element={user ? <Navigate to="/" replace /> : <Login />} 
-            />
+            <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
 
-            <Route 
-                path="/admin" 
-                element={
-                    <ProtectedRoute allowedRoles={['Admin']}>
-                        <AdminDashboard />
-                    </ProtectedRoute>
-                } 
-            />
+            <Route path="/admin" element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                    <AdminDashboard />
+                </ProtectedRoute>
+            } />
             
-            <Route 
-                path="/pos" 
-                element={
-                    <ProtectedRoute allowedRoles={['Admin', 'Cashier']}>
-                        <PosTerminal />
-                    </ProtectedRoute>
-                } 
-            />
+            <Route path="/pos" element={
+                <ProtectedRoute allowedRoles={['Admin', 'Cashier']}>
+                    <PosTerminal />
+                </ProtectedRoute>
+            } />
+
+            <Route path="/kds" element={
+                <ProtectedRoute allowedRoles={['Admin']}>
+                    <KitchenDisplay />
+                </ProtectedRoute>
+            } />
+
+            <Route path="/queue" element={
+                <ProtectedRoute allowedRoles={['Admin', 'Cashier']}>
+                    <ActiveOrders />
+                </ProtectedRoute>
+            } />
 
             <Route path="/unauthorized" element={<Unauthorized />} />
 
-            <Route 
-                path="/" 
-                element={
-                    !user ? <Navigate to="/login" replace /> : 
-                    user.role === 'Admin' ? <Navigate to="/admin" replace /> : 
-                    <Navigate to="/pos" replace />
-                } 
-            />
+            <Route path="/" element={
+                !user ? <Navigate to="/login" replace /> : 
+                user.role === 'Admin' ? <Navigate to="/admin" replace /> : 
+                <Navigate to="/pos" replace />
+            } />
         </Routes>
     );
 }

@@ -1,10 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import api from '../services/api';
 import './PosTerminal.css';
 
 export default function PosTerminal() {
     const { logout, user } = useContext(AuthContext);
+    const navigate = useNavigate();
     
     const [categories, setCategories] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
@@ -113,9 +115,7 @@ export default function PosTerminal() {
     return (
         <div className="pos-layout">
             
-            {/* Category Navigation & Menu Grid */}
             <section className="pos-main">
-                {/* Category Navigation Bar */}
                 <header className="pos-categories">
                     <button 
                         className={selectedCategory === 'all' ? 'cat-btn active' : 'cat-btn'}
@@ -134,7 +134,6 @@ export default function PosTerminal() {
                     ))}
                 </header>
 
-                {/* The Menu Items Grid */}
                 <div className="pos-grid">
                     {filteredItems.map(item => (
                         <button 
@@ -152,17 +151,23 @@ export default function PosTerminal() {
                 </div>
             </section>
 
-            {/* The Live Shopping Cart / Ticket */}
             <aside className="pos-sidebar">
                 <div className="cart-header">
                     <div>
-                        <h3>Current Ticket</h3>
-                        <p className="cashier-tag">Cachier: {user?.username}</p>
+                        <h3>📝 Current Ticket</h3>
+                        <p className="cashier-tag">👤 Register: {user?.username}</p>
                     </div>
-                    <button onClick={logout} className="pos-logout">Exit</button>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button 
+                            onClick={() => navigate('/queue')} 
+                            style={{ padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', border: '1px solid #2563eb', background: '#eff6ff', color: '#1d4ed8', fontWeight: 'bold' }}
+                        >
+                            View Queue
+                        </button>
+                        <button onClick={logout} className="pos-logout">Exit</button>
+                    </div>
                 </div>
 
-                {/* Live Ticket List */}
                 <div className="cart-items">
                     {cart.map(item => (
                         <div key={item.menuItemId} className="cart-item-row">
@@ -188,7 +193,6 @@ export default function PosTerminal() {
                     )}
                 </div>
 
-                {/* Financial Totals & Checkout Trigger */}
                 <div className="cart-footer">
                     <div className="summary-row">
                         <span>Subtotal</span>
