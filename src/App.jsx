@@ -3,17 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
-
-const PosTerminal = () => {
-    const { logout, user } = useContext(AuthContext);
-    return (
-        <div style={{ padding: '20px' }}>
-            <h2>Cashier POS Terminal</h2>
-            <p>Welcome, {user?.username}. Ready to take orders!</p>
-            <button onClick={logout}>Logout</button>
-        </div>
-    );
-};
+import PosTerminal from './pages/PosTerminal';
 
 const Unauthorized = () => (
     <div style={{ padding: '20px', color: 'red' }}>
