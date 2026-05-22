@@ -136,10 +136,42 @@
 }
 
 .inline-form input, .inline-form select {
-    padding: 10px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: inherit;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     flex: 1;
+    box-sizing: border-box; 
+    height: 42px; 
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.inline-form input:focus, .inline-form select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.inline-form select {
+    appearance: none; 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-color: #ffffff;
+    
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px 16px;
+    
+    padding-right: 36px; 
+    cursor: pointer;
+}
+
+.inline-form select:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
 }
 
 .btn-primary {

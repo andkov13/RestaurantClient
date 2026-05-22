@@ -96,8 +96,8 @@ export default function MenuItemManager() {
                     type="number" name="price" placeholder="Price (₴)" step="1"
                     value={formData.price} onChange={handleChange} required style={{ maxWidth: '100px' }}
                 />
-                <select name="categoryId" value={formData.categoryId} onChange={handleChange} required>
-                    <option value="" disabled>Select Category</option>
+                <select name="categoryId" className="form-select" value={formData.categoryId} onChange={handleChange} required>
+                    <option value="" disabled>-- Select Category --</option>
                     {categories.map(c => (
                         <option key={c.categoryId} value={c.categoryId}>{c.name}</option>
                     ))}

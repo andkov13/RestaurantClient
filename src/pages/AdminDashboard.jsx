@@ -6,6 +6,7 @@ import StaffManager from '../components/StaffManager';
 import CategoryManager from '../components/CategoryManager';
 import MenuItemManager from '../components/MenuItemManager';
 import IngredientManager from '../components/IngredientManager';
+import RecipeManager from '../components/RecipeManager';
 
 export default function AdminDashboard() {
     const { logout, user } = useContext(AuthContext);
@@ -46,24 +47,32 @@ export default function AdminDashboard() {
             <main className="admin-content">
                 {activeTab === 'staff' && <StaffManager />}
 
-                {activeTab === 'menu' && (
-                    <div className="tab-section">
-                        <header className="content-header">
-                            <h2>Menu & Inventory Management</h2>
-                        </header>
-                        <div className="menu-grid">
-                            <div><CategoryManager /></div>
-                            <div><MenuItemManager /></div>
-                        </div>
-                    </div>
-                )}
-
                 {activeTab === 'inventory' && (
                     <div className="tab-section">
                         <header className="content-header">
                             <h2>Inventory Management</h2>
                         </header>
                         <IngredientManager /> 
+                    </div>
+                )}
+
+                {activeTab === 'menu' && (
+                    <div className="tab-section">
+                        <header className="content-header">
+                            <h2>Menu & Recipe Management</h2>
+                        </header>
+                        
+                        <div className="menu-grid">
+                            <div>
+                                <CategoryManager />
+                            </div>
+                            <div>
+                                <MenuItemManager />
+                                <div style={{ marginTop: '20px' }}>
+                                    <RecipeManager />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </main>
