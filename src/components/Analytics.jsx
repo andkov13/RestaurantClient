@@ -20,6 +20,7 @@ export default function Analytics() {
 
     useEffect(() => {
         fetchSnapshot();
+        fetchCategories();
     }, []);
 
     useEffect(() => {
@@ -102,6 +103,12 @@ export default function Analytics() {
                                 <span className="metric-label">Avg Order Value</span>
                                 <span className="metric-value">{formatCurrency(data?.averageOrderValue || 0)}</span>
                             </div>
+                            <div className="metric-item">
+                                <span className="metric-label">Avg Ticket Time</span>
+                                <span className="metric-value" style={{ color: '#8b5cf6' }}>
+                                    {Math.round(data?.averageTicketTimeSeconds || 0)} sec
+                                </span>
+                            </div>
                         </div>
                     );
                 })}
@@ -167,6 +174,28 @@ export default function Analytics() {
                             </ResponsiveContainer>
                         </div>
 
+                        <div style={{ height: '300px' }}>
+                            <h4 style={{ textAlign: 'center', color: '#4b5563', marginBottom: '10px' }}>Average Ticket Time</h4>
+                            <ResponsiveContainer width="100%" height="100%" minWidth={1}>
+                                <LineChart data={currentChartData} margin={{ top: 10, right: 30, left: 20, bottom: 30 }}>
+                                    <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                                    <XAxis dataKey="label" />
+                                    <YAxis tickFormatter={(value) => `${value}s`} />
+                                    <Tooltip formatter={(value) => `${value} sec`} />
+                                    <Legend wrapperStyle={{ bottom: 0 }} />
+                                    <Line 
+                                        type="monotone" 
+                                        dataKey="averageTicketTimeSeconds" 
+                                        name="Avg Time (sec)" 
+                                        stroke="#8b5cf6" 
+                                        strokeWidth={3} 
+                                        dot={{ r: 4 }} 
+                                        activeDot={{ r: 6 }} 
+                                    />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
+
                     </div>
                 ) : (
                     <div className="text-center" style={{ padding: '50px 20px', color: '#6b7280', fontSize: '16px' }}>
@@ -174,7 +203,7 @@ export default function Analytics() {
                     </div>
                 )}
             </div>
-            
+
             <div className="card" style={{ marginTop: '20px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '10px' }}>
                     <h3 style={{ margin: 0, border: 'none', padding: 0 }}>Menu Intelligence</h3>
@@ -216,7 +245,7 @@ export default function Analytics() {
                         
                         <div>
                             <h4 style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                📈 Top Performers
+                                📈 Best Performers
                             </h4>
                             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px' }}>
                                 <thead>
@@ -224,6 +253,7 @@ export default function Analytics() {
                                         <th style={{ padding: '10px' }}>Item</th>
                                         <th style={{ padding: '10px' }}>Category</th>
                                         <th style={{ padding: '10px', textAlign: 'right' }}>Sold</th>
+                                        <th style={{ padding: '10px', textAlign: 'right' }}>Revenue</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -236,6 +266,9 @@ export default function Analytics() {
                                             <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600 }}>
                                                 {item.quantitySold}
                                             </td>
+                                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#6b7280' }}>
+                                                {formatCurrency(item.revenue)}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -244,7 +277,7 @@ export default function Analytics() {
 
                         <div>
                             <h4 style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                📉 Dead Weight
+                                📉 Worst Performers
                             </h4>
                             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '15px' }}>
                                 <thead>
@@ -252,6 +285,7 @@ export default function Analytics() {
                                         <th style={{ padding: '10px' }}>Item</th>
                                         <th style={{ padding: '10px' }}>Category</th>
                                         <th style={{ padding: '10px', textAlign: 'right' }}>Sold</th>
+                                        <th style={{ padding: '10px', textAlign: 'right' }}>Revenue</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -264,6 +298,9 @@ export default function Analytics() {
                                             <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600 }}>
                                                 {item.quantitySold}
                                             </td>
+                                            <td style={{ padding: '10px', textAlign: 'right', fontWeight: 600, color: '#4b5563' }}>
+                                                {formatCurrency(item.revenue)}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -271,18 +308,25 @@ export default function Analytics() {
                         </div>
 
                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                            <h4 style={{ color: '#4b5563', margin: '0 0 10px 0' }}>Total Revenue By Category</h4>
+                            <h4 style={{ color: '#4b5563', margin: '0 0 10px 0' }}>
+                                {selectedCategory ? 'Revenue By Menu Item' : 'Total Revenue By Category'}
+                            </h4>
                             <div style={{ width: '100%', height: '250px' }}>
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie
-                                            data={menuData.revenueByCategory.map(item => ({
-                                                ...item,
-                                                revenue: Number(item.revenue),
-                                                categoryName: getCategoryName(item.categoryId) 
-                                            }))}
+                                            data={selectedCategory 
+                                                ? (menuData.revenueByItem || []).map(item => ({
+                                                    name: item.menuItemName,
+                                                    revenue: Number(item.revenue)
+                                                }))
+                                                : (menuData.revenueByCategory || []).map(item => ({
+                                                    name: getCategoryName(item.categoryId),
+                                                    revenue: Number(item.revenue)
+                                                }))
+                                            }
                                             dataKey="revenue"
-                                            nameKey="categoryName" 
+                                            nameKey="name" 
                                             cx="50%"
                                             cy="50%"
                                             outerRadius={80}
@@ -291,7 +335,7 @@ export default function Analytics() {
                                             isAnimationActive={false}
                                             label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
                                         >
-                                            {menuData.revenueByCategory.map((entry, index) => (
+                                            {(selectedCategory ? (menuData.revenueByItem || []) : (menuData.revenueByCategory || [])).map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                                             ))}
                                         </Pie>
