@@ -7,6 +7,7 @@ import CategoryManager from '../components/CategoryManager';
 import MenuItemManager from '../components/MenuItemManager';
 import IngredientManager from '../components/IngredientManager';
 import RecipeManager from '../components/RecipeManager';
+import Analytics from '../components/Analytics';
 
 export default function AdminDashboard() {
     const { logout, user } = useContext(AuthContext);
@@ -37,6 +38,12 @@ export default function AdminDashboard() {
                         onClick={() => setActiveTab('inventory')}
                     >
                         Inventory Management
+                    </button>
+                    <button 
+                        className={activeTab === 'analytics' ? 'active' : ''} 
+                        onClick={() => setActiveTab('analytics')}
+                    >
+                        Analytics
                     </button>
                 </nav>
                 <div className="sidebar-footer">
@@ -73,6 +80,12 @@ export default function AdminDashboard() {
                                 </div>
                             </div>
                         </div>
+                    </div>
+                )}
+
+                {activeTab === 'analytics' && (
+                    <div className="tab-section">
+                        <Analytics />
                     </div>
                 )}
             </main>
