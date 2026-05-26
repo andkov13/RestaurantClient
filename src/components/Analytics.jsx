@@ -6,6 +6,8 @@ import {
 } from 'recharts';
 import api from '../services/api';
 import './Analytics.css';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 
 export default function Analytics() {
     const [snapshot, setSnapshot] = useState(null);
@@ -77,10 +79,68 @@ export default function Analytics() {
 
     const currentChartData = snapshot[chartView]?.chartData || [];
 
+const exportDashboardToPDF = () => {
+    const input = document.querySelector('.analytics-container'); 
+    
+    const selectors = document.querySelectorAll('select, .btn-primary');
+    selectors.forEach(el => el.style.visibility = 'hidden');
+
+    html2canvas(input, { 
+        scale: 2,
+        useCORS: true 
+    }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgWidth = 210;
+        const pageHeight = 295; 
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        let heightLeft = imgHeight;
+        let position = 0;
+
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft >= 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+        }
+
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const timestamp = `${year}-${month}-${day}_${hours}-${minutes}`;
+
+        pdf.save(`Restaurant_Report_${timestamp}.pdf`);
+        
+        selectors.forEach(el => el.style.visibility = 'visible');
+    });
+};
+
     return (
         <div className="analytics-container">
-            <header className="content-header" style={{ marginBottom: '20px' }}>
-                <h2>📈 Financial Overview</h2>
+            <header 
+                className="content-header" 
+                style={{ 
+                    marginBottom: '20px', 
+                    display: 'flex', 
+                    justifyContent: 'space-between', 
+                    alignItems: 'center' 
+                }}
+            >
+                <h2 style={{ margin: 0 }}>📈 Financial Overview</h2>
+                <button 
+                    className="btn-secondary" 
+                    onClick={exportDashboardToPDF}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                >
+                    📄 Export to PDF
+                </button>
             </header>
 
             <div className="metrics-grid">
@@ -161,7 +221,7 @@ export default function Analytics() {
                         </div>
 
                         <div style={{ height: '300px' }}>
-                            <h4 style={{ textAlign: 'center', color: '#4b5563', marginBottom: '10px' }}>Average Order Value (AOV)</h4>
+                            <h4 style={{ textAlign: 'center', color: '#4b5563', marginBottom: '10px' }}>Average Order Value</h4>
                             <ResponsiveContainer width="100%" height="100%">
                                 <LineChart data={currentChartData} margin={{ top: 10, right: 30, left: 20, bottom: 30 }}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} />
