@@ -97,7 +97,6 @@ export default function InventoryManager() {
             
             link.href = url;
 
-            // --- NEW: Generate local date and time string ---
             const now = new Date();
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -106,7 +105,6 @@ export default function InventoryManager() {
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const timestamp = `${year}-${month}-${day}_${hours}-${minutes}`;
 
-            // Inject the new timestamp into the filename
             link.setAttribute('download', `Inventory_Report_${timestamp}.xlsx`);
             
             document.body.appendChild(link);
