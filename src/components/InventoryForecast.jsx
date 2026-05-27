@@ -52,9 +52,7 @@ export default function InventoryForecast() {
 
         if (hasActual && !isLastActualDay) {
             return { ...item, forecastedUsage: null };
-        } else if (isLastActualDay) {
-            return { ...item, forecastedUsage: item.actualUsage };
-        }
+        } 
         
         return item;
     }) || [];
@@ -121,7 +119,7 @@ export default function InventoryForecast() {
                                     <Line 
                                         type="monotone" 
                                         dataKey="actualUsage" 
-                                        name="Фактичне використання" 
+                                        name="Actual Usage" 
                                         stroke="#3b82f6" 
                                         strokeWidth={3} 
                                         dot={{ r: 4 }} 
@@ -130,7 +128,7 @@ export default function InventoryForecast() {
                                     <Line 
                                         type="monotone" 
                                         dataKey="forecastedUsage" 
-                                        name="EMA Прогноз" 
+                                        name="EMA Forecast" 
                                         stroke="#f59e0b" 
                                         strokeWidth={2} 
                                         strokeDasharray="5 5" 
