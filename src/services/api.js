@@ -29,7 +29,9 @@ api.interceptors.response.use(
     (error) => {
         if (error.response && error.response.status === 401) {
 
-            if (error.config.url === '/Auth/login') {
+            const requestUrl = error.config.url.toLowerCase();
+            
+            if (requestUrl.endsWith('/login') || requestUrl.includes('auth/login')) {
                 return Promise.reject(error);
             }
             

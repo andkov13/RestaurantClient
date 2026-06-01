@@ -88,9 +88,9 @@ export default function PosTerminal() {
                 }))
             };
 
-            await api.post('/orders', orderPayload);
-            
-            alert('Order processed successfully!');
+            const response = await api.post('/orders', orderPayload);
+            console.log(response)
+            alert(`Order processed successfully! Order Number: #${response.data.displayNumber}`);
             clearCart();
         } catch (error) {
             const errorMsgBackend = error.response?.data?.Message;

@@ -104,7 +104,7 @@ export default function InventoryForecast() {
                         </div>
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '40px' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '60px' }}>
                         
                         <div style={{ height: '350px' }}>
                             <h4 style={{ textAlign: 'center', color: '#4b5563', marginBottom: '15px' }}>Usage</h4>
